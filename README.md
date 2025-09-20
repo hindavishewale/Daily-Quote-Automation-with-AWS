@@ -73,3 +73,5 @@ Responsibilities:
 ---
 
 ✨ With this setup, AWS services work together to create a **fully automated motivational quote delivery system** — efficient, scalable, and serverless.  
+<img width="936" height="510" alt="image" src="https://github.com/user-attachments/assets/380b4082-df6f-4d04-8902-c2c0320b6723" />
+
