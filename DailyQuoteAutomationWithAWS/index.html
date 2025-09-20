@@ -1,0 +1,46 @@
+import boto3
+import random
+import json
+from datetime import datetime
+
+# Initialize AWS services
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('Quotes')
+s3 = boto3.client('s3')
+sns = boto3.client('sns')
+
+# Configuration
+BUCKET_NAME = "quote-of-the-day-hindavi"
+SNS_TOPIC_ARN = "arn:aws:sns:ap-southeast-1:346549655995:DailyQuoteTopic"
+
+def lambda_handler(event, context):
+    # Fetch all items from DynamoDB
+    response = table.scan()
+    items = response['Items']
+
+    # Select a random quote
+    quote_item = random.choice(items)
+    quote_text = quote_item.get('id', 'No quote available')
+    daily_quote = {
+        "quote": quote_text,
+        "author": "Unknown",
+        "date": datetime.utcnow().strftime("%Y-%m-%d")
+    }
+
+    # Save the quote to S3
+    s3.put_object(
+        Bucket=BUCKET_NAME,
+        Key="quote-of-the-day.json",
+        Body=json.dumps(daily_quote),
+        ContentType="application/json"
+    )
+
+    # Publish the quote to SNS (SMS and Email)
+    message = f"Today's Quote: \"{quote_text}\""
+    sns.publish(
+        TopicArn=SNS_TOPIC_ARN,
+        Message=message,
+        Subject="Quote of the Day"
+    )
+
+    return {"status": "success", "quote": daily_quote}
