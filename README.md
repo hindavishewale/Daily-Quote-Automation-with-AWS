@@ -28,22 +28,43 @@ CloudWatch Logs capture Lambda start/end time, SNS responses, and errors.
 
 Can be extended with CloudWatch Alarms to send alerts on failures.
 
-DynamoDB Quotes Table
-<img width="1904" height="924" alt="image" src="https://github.com/user-attachments/assets/a70d70c1-9a11-4f0c-bda1-7ebbb68f45ca" />
+## 📸 Screenshots  
 
-CloudWatch Logs
-<img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/d0e72e78-f897-4eee-a160-edbc811c8daa" />
+### 1. DynamoDB Quotes Table  
+<img width="1904" height="924" alt="DynamoDB Table" src="https://github.com/user-attachments/assets/a70d70c1-9a11-4f0c-bda1-7ebbb68f45ca" />  
+👉 This table stores all the motivational quotes. Each item has an `id` as the partition key and the quote text. Lambda fetches a random quote from this table daily.  
 
-S3 bucket
-<img width="1918" height="871" alt="image" src="https://github.com/user-attachments/assets/57c3fd04-b52b-4a7b-9628-1f1fd30a4fc0" />
+---
 
-SNS
-<img width="1900" height="871" alt="image" src="https://github.com/user-attachments/assets/57790256-8d91-4535-b485-12d6ef3f8e93" />
+### 2. CloudWatch Logs  
+<img width="1917" height="940" alt="CloudWatch Logs" src="https://github.com/user-attachments/assets/d0e72e78-f897-4eee-a160-edbc811c8daa" />  
+👉 CloudWatch records all executions of the **DailyQuoteFunction** Lambda. It logs start/end times, SNS publish responses, and any errors that occur during execution.  
 
-Lambda
-<img width="1909" height="845" alt="image" src="https://github.com/user-attachments/assets/f507624f-773e-4345-ac84-e080eeedec7d" />
+---
 
-Event Bridge
-<img width="1913" height="871" alt="image" src="https://github.com/user-attachments/assets/6bd4e2f0-adbf-4348-bd98-8374130abbfe" />
+### 3. S3 Bucket  
+<img width="1918" height="871" alt="S3 Bucket" src="https://github.com/user-attachments/assets/57c3fd04-b52b-4a7b-9628-1f1fd30a4fc0" />  
+👉 The daily selected quote is stored in **S3** as `quote-of-the-day.json`. This keeps a historical record of all delivered quotes and allows integration with future web apps.  
+
+---
+
+### 4. SNS (Simple Notification Service)  
+<img width="1900" height="871" alt="SNS" src="https://github.com/user-attachments/assets/57790256-8d91-4535-b485-12d6ef3f8e93" />  
+👉 SNS delivers the daily quote to all subscribers via SMS and Email. Each subscriber must confirm their subscription before receiving notifications.  
+
+---
+
+### 5. Lambda Function  
+<img width="1909" height="845" alt="Lambda" src="https://github.com/user-attachments/assets/f507624f-773e-4345-ac84-e080eeedec7d" />  
+👉 The `DailyQuoteFunction` Lambda is the **core logic** of the project. It fetches a random quote from DynamoDB, saves it to S3, and publishes it to SNS. It runs automatically once per day.  
+
+---
+
+### 6. EventBridge Rule  
+<img width="1913" height="871" alt="EventBridge" src="https://github.com/user-attachments/assets/6bd4e2f0-adbf-4348-bd98-8374130abbfe" />  
+👉 EventBridge schedules the Lambda function to run daily. The rule `DailyQuoteRule` is configured to trigger the Lambda once every 24 hours (or at a specific cron time).  
+
+---
+
 
 
