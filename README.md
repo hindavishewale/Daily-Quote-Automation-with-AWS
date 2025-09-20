@@ -11,7 +11,8 @@ The Daily Quote Project is an automated cloud-based application that delivers mo
 | **EventBridge** | Automates daily execution of the Lambda function.                      | Rule: `DailyQuoteRule` <br> Schedule: `rate(1 day)` / `cron(0 9 * * ? *)` |
 | **CloudWatch**  | Monitors executions, logs Lambda and SNS activities, tracks errors.    | Log Group: `/aws/lambda/DailyQuoteFunction` |
 
-## 📌 Architecture  
+## 🏗️ Architecture  
+
 ```mermaid
 flowchart TD
     EB[EventBridge (Schedule Rule)] --> L[Lambda Function]
@@ -21,6 +22,7 @@ flowchart TD
     SNS --> SMS[SMS Subscribers]
     SNS --> Email[Email Subscribers]
     L --> CW[(CloudWatch Logs)]
+
 
 📊 Monitoring
 
